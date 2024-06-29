@@ -1,0 +1,73 @@
+package com.example.LibraryManagementSystem;
+
+
+import com.example.LibraryManagementSystem.library.Book;
+import com.example.LibraryManagementSystem.library.Department;
+import com.example.LibraryManagementSystem.library.Library;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class LibraryTest {
+    private Library library;
+
+    @BeforeEach
+    public void setUp() {
+        library = new Library();
+        Department department1 = new Department("Department1");
+        Department department2 = new Department("Department2");
+
+        library.addDepartment(department1);
+        library.addDepartment(department2);
+
+        Book book1 = new Book("Title1", "Author1", "ISBN1", "Genre1", 2000, true);
+        Book book2 = new Book("Title2", "Author2", "ISBN2", "Genre2", 2001, false);
+        Book book3 = new Book("Title3", "Author1", "ISBN3", "Genre3", 2002, true);
+
+        library.addBook("Department1", book1);
+        library.addBook("Department1", book2);
+        library.addBook("Department2", book3);
+    }
+
+    @Test
+    public void testAddBook() {
+        Book book4 = new Book("Title4", "Author3", "ISBN4", "Genre4", 2003, true);
+        library.addBook("Department2", book4);
+        assertEquals(4, library.listAllBooks().size());
+    }
+
+    @Test
+    public void testRemoveBook() {
+        library.removeBook("ISBN1");
+        assertEquals(2, library.listAllBooks().size());
+    }
+
+    @Test
+    public void testFindBookByTitle() {
+        List<Book> books = library.findBookByTitle("Title1");
+        assertEquals(1, books.size());
+        assertEquals("Title1", books.get(0).getTitle());
+    }
+
+    @Test
+    public void testFindBookByAuthor() {
+        List<Book> books = library.findBookByAuthor("Author1");
+        assertEquals(2, books.size());
+    }
+
+    @Test
+    public void testListAllBooks() {
+        List<Book> books = library.listAllBooks();
+        assertEquals(3, books.size());
+    }
+
+    @Test
+    public void testListAvailableBooks() {
+        List<Book> books = library.listAvailableBooks();
+        assertEquals(2, books.size());
+    }
+}
